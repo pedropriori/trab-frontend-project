@@ -33,9 +33,9 @@ const TopMovies = () => {
       <Box className="movies-list">
         {moviesData?.map(movie => (
           <Box className="movie" key={movie.id}>
-            <Image src={movie.image} alt={movie.fullTitle} mb={4} borderRadius="md" />
+            <Image src={movie.image} alt={movie.title} mb={4} borderRadius="md" />
             <Heading as="h4" size="md" mb={2}>
-              {movie.fullTitle}
+              {movie.title}
             </Heading>
             <Box className="movie-info">
               <Text className="rank">Rank: {movie.rank}</Text>
