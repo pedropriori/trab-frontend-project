@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Box, Heading, Image, Spinner, Text } from '@chakra-ui/react';
+import { Box, Button, Heading, Image, Spinner, Text } from '@chakra-ui/react';
 import './TopMovies.css';
 import axios from 'axios';
 import APIKey from '../config/key';
@@ -7,12 +7,15 @@ import APIKey from '../config/key';
 const TopMovies = () => {
   const [moviesData, setMoviesData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
   const fetchTopMovies = useCallback(async () => {
     try {
       setLoading(true);
       const { data } = await axios.get(`https://imdb-api.com/en/API/Top250Movies/${APIKey}`);
       setMoviesData(data.items);
+      setTotalPages(Math.ceil(data.items.length / 16));
     } catch (error) {
       console.log(error);
     } finally {
@@ -29,9 +32,13 @@ const TopMovies = () => {
       return <Spinner size="xl" />;
     }
 
+    const startIndex = (currentPage - 1) * 16;
+    const endIndex = startIndex + 16;
+    const currentMovies = moviesData.slice(startIndex, endIndex);
+
     return (
       <Box className="movies-list">
-        {moviesData?.map(movie => (
+        {currentMovies?.map(movie => (
           <Box className="movie" key={movie.id}>
             <Image src={movie.image} alt={movie.title} mb={4} borderRadius="md" />
             <Heading as="h4" size="md" mb={2}>
@@ -50,12 +57,56 @@ const TopMovies = () => {
     );
   };
 
+  const handlePageChange = page => {
+    setCurrentPage(page);
+  };
+
+  const renderPaginationButtons = () => {
+    const buttons = [];
+
+    for (let i = 1; i <= totalPages; i++) {
+      buttons.push(
+        <Button
+          key={i}
+          variant="outline"
+          colorScheme={currentPage === i ? 'blue' : 'gray'}
+          onClick={() => handlePageChange(i)}
+        >
+          {i}
+        </Button>
+      );
+    }
+
+    return buttons;
+  };
+
   return (
     <Box className="top-movies">
       <Heading as="h2" size="xl" mb={4}>
         Top 250 Movies
       </Heading>
+
+      <Text as="h5">IMDb Top 250 as rated by regular IMDb voters.</Text>
       {renderTopMovies()}
+      <Box mt={4}>
+        <Button
+          variant="outline"
+          colorScheme="blue"
+          disabled={currentPage === 1}
+          onClick={() => handlePageChange(currentPage - 1)}
+        >
+          Previous
+        </Button>
+        {renderPaginationButtons()}
+        <Button
+          variant="outline"
+          colorScheme="blue"
+          disabled={currentPage === totalPages}
+          onClick={() => handlePageChange(currentPage + 1)}
+        >
+          Next
+        </Button>
+      </Box>
     </Box>
   );
 };
