@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Button, Flex, List, ListItem } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
+import { GiHamburgerMenu } from 'react-icons/gi'
 
 const Sidebar = () => {
   const [expanded, setExpanded] = useState(false);
@@ -14,7 +15,7 @@ const Sidebar = () => {
     <Box
       bg="#f0f0f0"
       h="100vh"
-      width={expanded ? '200px' : '80px'}
+      width={expanded ? '200px' : '50px'}
       transition="width 0.3s ease"
       position="fixed"
       top="0"
@@ -30,7 +31,7 @@ const Sidebar = () => {
           textAlign="center"
           cursor="pointer"
         >
-          Guide
+          <GiHamburgerMenu />
         </Button>
         {expanded && (
           <Box p="4">
