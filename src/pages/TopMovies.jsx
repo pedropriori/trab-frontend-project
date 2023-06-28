@@ -82,11 +82,11 @@ const TopMovies = () => {
 
   return (
     <Box className="top-movies">
-      <Heading as="h2" size="xl" mb={4}>
+      <Heading as="h2" size="xl" mb={3}>
         Top 250 Movies
       </Heading>
 
-      <Text as="h5">IMDb Top 250 as rated by regular IMDb voters.</Text>
+      <Text as="h5" mb="20px">IMDb Top 250 as rated by regular IMDb voters.</Text>
       {renderTopMovies()}
       <Box mt={4}>
         <Button
